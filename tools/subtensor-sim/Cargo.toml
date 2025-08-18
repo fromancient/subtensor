@@ -1,0 +1,100 @@
+[package]
+name = "subtensor-sim"
+version = "0.1.0"
+edition.workspace = true
+authors = ["Opentensor Foundation <https://github.com/opentensor/>"]
+description = "Native runtime-based no-tx simulator for Subtensor"
+license = "Unlicense"
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "subtensor-sim"
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tokio = { version = "1.0", features = ["full"] }
+futures = { workspace = true }
+log = { workspace = true }
+env_logger = "0.10"
+hex = { workspace = true }
+
+# Substrate dependencies
+sc-cli = { workspace = true }
+sc-service = { workspace = true }
+sc-client-api = { workspace = true }
+sc-block-builder = { workspace = true }
+sc-consensus = { workspace = true }
+sc-consensus-aura = { workspace = true }
+sc-consensus-manual-seal = { workspace = true }
+sc-transaction-pool = { workspace = true }
+sc-transaction-pool-api = { workspace = true }
+sc-keystore = { workspace = true }
+sc-network = { workspace = true }
+sc-offchain = { workspace = true }
+sc-telemetry = { workspace = true }
+sc-chain-spec = { workspace = true }
+sc-chain-spec-derive = { workspace = true }
+
+# Runtime dependencies
+node-subtensor-runtime = { workspace = true, default-features = false }
+subtensor-custom-rpc-runtime-api = { workspace = true, default-features = false }
+
+# Sp dependencies
+sp-api = { workspace = true }
+sp-blockchain = { workspace = true }
+sp-consensus = { workspace = true }
+sp-core = { workspace = true }
+sp-inherents = { workspace = true }
+sp-keyring = { workspace = true }
+sp-offchain = { workspace = true }
+sp-runtime = { workspace = true }
+sp-session = { workspace = true }
+sp-std = { workspace = true }
+sp-timestamp = { workspace = true }
+sp-transaction-pool = { workspace = true }
+
+# Chain spec
+chain_spec = { path = "../../node/src/chain_spec" }
+
+[features]
+default = ["std"]
+std = [
+	"node-subtensor-runtime/std",
+	"subtensor-custom-rpc-runtime-api/std",
+	"sp-api/std",
+	"sp-blockchain/std",
+	"sp-consensus/std",
+	"sp-core/std",
+	"sp-inherents/std",
+	"sp-keyring/std",
+	"sp-offchain/std",
+	"sp-runtime/std",
+	"sp-session/std",
+	"sp-std/std",
+	"sp-timestamp/std",
+	"sp-transaction-pool/std",
+	"sc-cli/std",
+	"sc-service/std",
+	"sc-client-api/std",
+	"sc-block-builder/std",
+	"sc-consensus/std",
+	"sc-consensus-aura/std",
+	"sc-consensus-manual-seal/std",
+	"sc-transaction-pool/std",
+	"sc-transaction-pool-api/std",
+	"sc-keystore/std",
+	"sc-network/std",
+	"sc-offchain/std",
+	"sc-telemetry/std",
+	"sc-chain-spec/std",
+	"sc-chain-spec-derive/std",
+]
+sim-json = [
+	"node-subtensor-runtime/sim-json",
+	"subtensor-custom-rpc-runtime-api/sim-json",
+]

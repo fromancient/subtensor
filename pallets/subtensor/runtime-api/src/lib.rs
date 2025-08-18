@@ -14,6 +14,25 @@ use pallet_subtensor::rpc_info::{
 use sp_runtime::AccountId32;
 use subtensor_runtime_common::{AlphaCurrency, NetUid, TaoCurrency};
 
+// Data structures for the YieldsApi
+#[cfg(feature = "sim-json")]
+#[derive(codec::Encode, codec::Decode, scale_info::TypeInfo, Clone, Debug)]
+pub struct SubnetMetric {
+    pub netuid: u16,
+    pub stake_total: u128,        // chain units
+    pub emission_per_block: u128, // chain units
+    pub participants: u32,        // optional, if cheap
+}
+
+#[cfg(feature = "sim-json")]
+#[derive(codec::Encode, codec::Decode, scale_info::TypeInfo, Clone, Debug)]
+pub struct BlockMetrics {
+    pub block_number: u64,
+    pub state_root: [u8; 32],
+    pub timestamp_ms: u64,           // from Timestamp pallet
+    pub subnets: Vec<SubnetMetric>,  // one entry per active subnet
+}
+
 // Here we declare the runtime API. It is implemented it the `impl` block in
 // src/neuron_info.rs, src/subnet_info.rs, and src/delegate_info.rs
 sp_api::decl_runtime_apis! {
@@ -54,5 +73,10 @@ sp_api::decl_runtime_apis! {
 
     pub trait SubnetRegistrationRuntimeApi {
         fn get_network_registration_cost() -> TaoCurrency;
+    }
+
+    #[cfg(feature = "sim-json")]
+    pub trait YieldsApi<Block: sp_runtime::traits::Block> {
+        fn block_metrics() -> BlockMetrics;
     }
 }

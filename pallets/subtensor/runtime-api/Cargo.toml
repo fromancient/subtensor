@@ -33,3 +33,4 @@ std = [
 	"subtensor-runtime-common/std",
 ]
 pow-faucet = []
+sim-json = []

@@ -294,3 +294,6 @@ try-runtime = [
 	"pallet-drand/try-runtime",
 ]
 metadata-hash = ["substrate-wasm-builder/metadata-hash"]
+sim-json = [
+	"subtensor-custom-rpc-runtime-api/sim-json",
+]

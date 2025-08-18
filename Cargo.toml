@@ -32,6 +32,7 @@ members = [
 	"primitives/*",
 	"runtime",
 	"support/*",
+	"tools/*",
 ]
 resolver = "2"
 
@@ -266,6 +267,9 @@ codegen-units = 1
 [features]
 default = []
 pow-faucet = []
+sim-json = [
+	"node-subtensor-runtime/sim-json",
+]
 
 [patch."https://github.com/paritytech/polkadot-sdk.git"]
 sc-consensus-grandpa = { git = "https://github.com/opentensor/grandpa.git", rev = "67ff75e915bd44586b8f8443e457b5b101920da8" }

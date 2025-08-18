@@ -2372,6 +2372,56 @@ impl_runtime_apis! {
                 .saturating_to_num()
         }
     }
+
+    #[cfg(feature = "sim-json")]
+    impl subtensor_custom_rpc_runtime_api::YieldsApi<Block> for Runtime {
+        fn block_metrics() -> subtensor_custom_rpc_runtime_api::BlockMetrics {
+            use pallet_timestamp::Pallet as Timestamp;
+            use frame_system::Pallet as System;
+            
+            let block_number = System::block_number();
+            let state_root = *System::block_hash(block_number).as_ref();
+            let timestamp_ms = Timestamp::now();
+            
+            let mut subnets = Vec::new();
+            
+            // Get all active subnets
+            for netuid in SubtensorModule::get_all_subnet_netuids() {
+                // Skip root subnet
+                if netuid == subtensor_runtime_common::NetUid::ROOT {
+                    continue;
+                }
+                
+                // Get subnet info to check if it's active
+                if let Some(subnet_info) = SubtensorModule::get_subnet_info(netuid) {
+                    // Get total stake for this subnet
+                    let stake_total = SubtensorModule::get_total_stake_on_subnet(netuid);
+                    
+                    // Get emission per block for this subnet
+                    let emission_per_block = SubtensorModule::get_block_emission()
+                        .unwrap_or(0)
+                        .into();
+                    
+                    // Get number of participants (neurons)
+                    let participants = SubtensorModule::get_subnet_n(netuid);
+                    
+                    subnets.push(subtensor_custom_rpc_runtime_api::SubnetMetric {
+                        netuid: netuid.into(),
+                        stake_total: stake_total.into(),
+                        emission_per_block,
+                        participants,
+                    });
+                }
+            }
+            
+            subtensor_custom_rpc_runtime_api::BlockMetrics {
+                block_number: block_number.into(),
+                state_root,
+                timestamp_ms,
+                subnets,
+            }
+        }
+    }
 }
 
 #[test]
